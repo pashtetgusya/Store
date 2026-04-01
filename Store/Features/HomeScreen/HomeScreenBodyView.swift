@@ -1,26 +1,7 @@
 import UIKit
 
-final class HomeScreenView: UIView {
+final class HomeScreenBodyView: UIView {
     
-    // MARK: Subviews
-    
-    let backgroundGradientLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        layer.colors = [
-            UIColor.black.cgColor,
-            UIColor.black.withAlphaComponent(0.75).cgColor
-        ]
-        layer.startPoint = .init(x: 0, y: 0)
-        layer.endPoint = .init(x: 1, y: 1)
-        
-        return layer
-    }()
-    let headerView: HomeScreenHeaderView = {
-        let view = HomeScreenHeaderView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -52,14 +33,14 @@ final class HomeScreenView: UIView {
     
     private let scrollViewTopCornerRadius: CGFloat = 20
     private let scrollViewContentTopPadding: CGFloat = 20
-    private let headerViewHeight: CGFloat = UIScreen.main.bounds.height / 5
+    var initialContentOffset: CGPoint = .zero
     
-    // MARK: Initialization
+    // MARK: Initilalization
     
     init() {
         super.init(frame: .zero)
         addSubviews()
-        setupConstrains()
+        setupConstraints()
         setupAppearance()
     }
     
@@ -70,31 +51,22 @@ final class HomeScreenView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        backgroundGradientLayer.frame = bounds
+        
+        guard initialContentOffset == .zero else { return }
+        initialContentOffset = scrollView.contentOffset
     }
     
     // MARK: Setup functions
     
-    func addWidget(_ view: UIView) {
-        scrollContentStackView.addArrangedSubview(view)
-    }
-    
     private func addSubviews() {
-        layer.addSublayer(backgroundGradientLayer)
-        addSubview(headerView)
         addSubview(scrollView)
         scrollView.addSubview(scrollBackgroundView)
         scrollView.addSubview(scrollContentStackView)
     }
     
-    private func setupConstrains() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: headerViewHeight),
-            
-            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -112,8 +84,6 @@ final class HomeScreenView: UIView {
     }
     
     private func setupAppearance() {
-        backgroundColor = .white
-        scrollView.contentInset = UIEdgeInsets(top: headerViewHeight, left: 0, bottom: 0, right: 0)
         scrollContentStackView.layoutMargins = UIEdgeInsets(
             top: scrollViewContentTopPadding,
             left: 0,

@@ -57,12 +57,24 @@ final class HomeScreenHeaderView: UIView {
     
     init() {
         super.init(frame: .zero)
+        addSubviews()
+        setupConstraints()
+    }
+    
+    @available(*, unavailable)
+    required init?(coder aDecoder: NSCoder) { nil }
+    
+    // MARK: Setup functions
+    
+    private func addSubviews() {
         addSubview(titlelabel)
         addSubview(itemsStackView)
         itemsStackView.addArrangedSubview(favoritesItem)
         itemsStackView.addArrangedSubview(comparisonItem)
         itemsStackView.addArrangedSubview(mapView)
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titlelabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 30),
             titlelabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
@@ -74,7 +86,4 @@ final class HomeScreenHeaderView: UIView {
             itemsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15)
         ])
     }
-    
-    @available(*, unavailable)
-    required init?(coder aDecoder: NSCoder) { nil }
 }
