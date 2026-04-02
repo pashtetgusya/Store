@@ -1,6 +1,8 @@
 import UIKit
 
-final class HomeScreenWidgetRepository {
+// MARK: - Home screent widget repository protocol implementation
+
+final class HomeScreenWidgetRepositoryImpl: HomeScreenWidgetRepository {
     
     func getWidget(_ widget: HomeScreenWidget) -> UIViewController {
         switch widget {
